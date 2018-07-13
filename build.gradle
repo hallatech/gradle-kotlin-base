@@ -1,0 +1,79 @@
+buildscript {
+    ext {
+        kotlin_version = "1.2.51"
+        junit_platform_version = "5.2.0"
+        spek_version = "1.1.5"
+        groovy_version = "2.4.12"
+    }
+//    dependencies {
+//        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
+//    }
+}
+plugins {
+    id 'groovy'
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.2.51'
+}
+
+group 'net.hallatech'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    //For Kotlin Spek
+    maven { url "http://dl.bintray.com/jetbrains/spek" }
+}
+
+//apply plugin: 'org.junit.platform.gradle.plugin'
+
+dependencies {
+    //Gradle API calls in source
+    compile gradleApi()
+    //Groovy source and tests
+    compile "org.codehaus.groovy:groovy-all:${groovy_version}"
+    //Kotlin source
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlin_version}"
+    //Groovy test source with Spock excluding groovy core
+    testCompile("org.spockframework:spock-core:1.1-groovy-2.4-rc-2") {
+        exclude module: "groovy-all"
+    }
+    //JUnit5 testing
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junit_platform_version}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junit_platform_version}"
+    //JUnit4 testing on JUnit5 Platform
+    testCompileOnly group: 'junit', name: 'junit', version: '4.12'
+    testRuntimeOnly "org.junit.vintage:junit-vintage-engine:${junit_platform_version}"
+    //Kotlin Spek testing, exclude the group used in Spek if a different version of Kotlin is used
+    testCompile "org.jetbrains.kotlin:kotlin-reflect:${kotlin_version}"
+    testCompile ("org.jetbrains.spek:spek-api:${spek_version}") {
+        exclude group: 'org.jetbrains.kotlin'
+    }
+    testRuntime ("org.jetbrains.spek:spek-junit-platform-engine:${spek_version}") {
+        exclude group: 'org.junit.platform'
+        exclude group: 'org.jetbrains.kotlin'
+    }
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+//JUnit5
+test {
+    useJUnitPlatform()
+}
+
+//Run Kotlin Spek tests only
+//junitPlatform {
+//    filters {
+//        engines {
+//            include 'spek'
+//        }
+//    }
+//}
