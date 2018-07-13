@@ -12,6 +12,9 @@ and corresponding tests for:
 - JUnit4 and JUnit5 for Java
 - Spek for Kotlin
 
+The build logic of the plugin does nothing but print a message.
+Later will add and test configurations DSL and tasks.
+
 # Build
 
 `build.gradle` is a default Groovy DSL based build file rather than a Kotlin DSL at this point.
@@ -36,3 +39,14 @@ The inclusion of the following plugin in the buildscript causes the test reports
 Default tasks will clean and build:
 
     defaultTasks 'clean', 'build'
+    
+Add the java-gradle-plugin to autogenerate the plugin manifests
+
+# Functional Tests
+Functional test added using Gradle testkit. For now these are just included in the default test source directories.
+They can be later moved to functional source sets.
+
+The functional test for Kotlin didn't work easily using Spek. The @Rule for the temporary folder didn't play well in Spek,
+so workarounds using JvmFile or get annotations made no difference. Splitting into a separate inner class also never resolved 
+and had the side effect of overwriting the project build file. So just reverted to standard Junit tests.
+
