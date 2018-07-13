@@ -13,6 +13,7 @@ plugins {
     id 'groovy'
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.2.51'
+    id 'java-gradle-plugin'
 }
 
 group 'net.hallatech'
@@ -55,6 +56,8 @@ dependencies {
         exclude group: 'org.junit.platform'
         exclude group: 'org.jetbrains.kotlin'
     }
+    //Functional testing with gradle testkit not required with java-gradle-plugin
+//    testCompile gradleTestKit()
 }
 
 compileKotlin {
@@ -79,3 +82,21 @@ test {
 //}
 
 defaultTasks 'clean', 'build'
+
+//Configure the auto-generated plugin manifest
+gradlePlugin {
+    plugins {
+        javaBasePlugin {
+            id = 'net.hallatech.java-base-plugin'
+            implementationClass = 'net.hallatech.gradle.plugin.JavaBasePlugin'
+        }
+        groovyBasePlugin {
+            id = 'net.hallatech.groovy-base-plugin'
+            implementationClass = 'net.hallatech.gradle.plugin.GroovyBasePlugin'
+        }
+        kotlinBasePlugin {
+            id = 'net.hallatech.kotlin-base-plugin'
+            implementationClass = 'net.hallatech.gradle.plugin.KotlinBasePlugin'
+        }
+    }
+}
