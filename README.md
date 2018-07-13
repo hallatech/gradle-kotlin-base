@@ -27,7 +27,7 @@ Adding the following only runs the Spek tests so is commented out
         }
     }
 
-The inclusion of the following plugin in the buildscript causes the test reports not to be run and seems to have not other effect currently if commented out
+The inclusion of the following plugin in the buildscript causes the test reports not to be run and seems to have no other effect currently if commented out
 
         dependencies {
             classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
